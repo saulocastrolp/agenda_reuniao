@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace CalendarApp\Http\Controllers;
 
 use Illuminate\Http\Request;
 

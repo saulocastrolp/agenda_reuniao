@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Providers;
+namespace CalendarApp\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
