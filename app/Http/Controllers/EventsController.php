@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use CalendarApp\Evento;
 use Illuminate\Http\Response;
 use Auth;
-use Event;
 
 global $time_start;
 
