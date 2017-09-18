@@ -44,7 +44,7 @@ Requisitos:
 `php artisan migrate`
 
 10ºPasso e último passo
-- Execute o comando `php artisan serve` para rodar o servidor local e abra o navegador e digite o endereço: `http:\\localhost:8000`, faça seu cadastro e esta pronto!!
+- Execute o comando `php artisan serve` para rodar o servidor local e abra o navegador e digite o endereço: `http:\\localhost:8000`, faça seu cadastro e está pronto para uso!!
 
 
 ## Foram ultilizados as seguintes ferramentas:
@@ -54,5 +54,5 @@ Requisitos:
 - ColorPicker e DatePicker do repositório: https://github.com/seguce92/fullcalendar-laravel/tree/master/public/vendor/seguce92
 
 ## Dúvidas ou problemas:
-Email: eduardoroseo@gmail.com
+Email: eduardoroseo@gmail.com </br>
 Skype: eduardo.roseo
