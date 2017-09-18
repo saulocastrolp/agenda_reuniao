@@ -4,6 +4,11 @@ namespace CalendarApp\Http\Controllers;
 
 use Illuminate\Http\Request;
 use CalendarApp\Evento;
+use Illuminate\Http\Response;
+use Auth;
+use Event;
+
+global $time_start;
 
 class EventsController extends Controller
 {
@@ -14,10 +19,11 @@ class EventsController extends Controller
      */
     public function index()
     {
-        $data = Evento::all();
+        $data = Evento::get(['id', 'title', 'color','start', 'end', 'user_id',])
+            ->where('user_id', Auth::user()->id);
 
         return Response()->json($data);
-    }
+     }
 
     /**
      * Show the form for creating a new resource.
@@ -37,7 +43,16 @@ class EventsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $evento = new Evento();
+        $evento->title = $request->title;
+        $evento->start = $request->date_start . ' ' . $request->time_start;
+        $evento->end = $request->date_end;
+        $evento->color = $request->color;
+        $evento->user_id = Auth::user()->id;
+
+        $evento->save();
+    
+        return redirect('/home');
     }
 
     /**

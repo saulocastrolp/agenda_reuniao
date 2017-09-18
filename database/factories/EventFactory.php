@@ -8,6 +8,6 @@ $factory->define(CalendarApp\Evento::class, function (Faker $faker) {
         'start' => $faker->dateTimeThisMonth(),
         'end' => $faker->dateTimeThisMonth(),
         'color' => $faker->hexColor,
-        'user_id' => 1,
+        'user_id' => 3,
     ];
 });

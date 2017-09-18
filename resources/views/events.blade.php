@@ -8,7 +8,69 @@
 
 @section('content')
     <p>Welcome to this beautiful admin panel.</p>
-    <div id="calendar"></div>
+    {{--  <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-9">
+            <div class="box box-primary">
+                <div class="box-body no-padding">
+                    <div id="calendar"></div>
+                </div>
+            </div>
+        </div>
+    </div>  --}}
+    <div class="row">
+        <div class="col-xs 12">
+            <div class="box box-primary">
+                <div class="box-body">
+                    {!! Form::open(['route' => 'events.store', 'method' => 'post', 'role' => 'form']) !!}
+                    <div id="responsive-modal" class="modal fade" tabindex="-1" data-backdrop="static">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4>Novo Evento</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        {!! Form::label('title', 'Titulo do Evento') !!}
+                                        {!! Form::text('title', old('title'), ['class' => 'form-control']) !!}
+                                    </div>
+                                    <div class="form-group">
+                                        {!! Form::label('date_start', 'Data Início') !!}
+                                        {!! Form::text('date_start', old('date_start'), ['class' => 'form-control', 'readonly' => 'true']) !!}
+                                    </div>
+                                    <div class="form-group">
+                                        {!! Form::label('time_start', 'Hora Início', ['class' => 'form-control']) !!}
+                                        {!! Form::text('time_start', old('time_start'), ['class' => 'form-control']) !!}
+                                    </div>
+                                    <div class="form-group">
+                                        {!! Form::label('date_end', 'Data e Hora Fim', ['class' => 'form-control']) !!}
+                                        {!! Form::text('date_end', old('date_end'), ['class' => 'form-control']) !!}
+                                    </div>
+                                    <div class="form-group">
+                                        {!! Form::label('color', 'Cor', ['class' => 'form-control']) !!}
+                                        <div class="input-group colorpicker">
+                                            {!! Form::text('color', old('color'), ['class' => 'form-control']) !!}
+                                            <span class="input-group-addon">
+                                                <i></i> 
+                                            </span>                                            
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-dafault" data-dismiss="modal">
+                                        Cancelar
+                                    </button>
+                                    {!! Form::submit('Salvar', ['class' => 'btn btn-success']) !!}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {!! Form::close() !!}
+                    <div id="calendar"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 @stop
 
 @section('css')
@@ -18,6 +80,9 @@
     {!! Html::style('vendor/adminlte/css/bootstrap.min.css') !!}
     {!! Html::style('css/admin_custom.css') !!}
     {!! Html::style('vendor/fullcalendar/fullcalendar.min.css') !!}
+    {!! Html::style('vendor/bootstrap-datetimepicker/css/bootstrap-material-datetimepicker.css') !!}
+    {!! Html::style('vendor/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css') !!}
+    
     {{--  {!! Html::style('vendor/seguce92/bootstrap-datetimepicker/css/bootstrap-material-datetimepicker.css') !!}
     {!! Html::style('vendor/seguce92/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css') !!}  --}}
 @stop
@@ -26,11 +91,14 @@
     {{--  <script src='/vendor/fullcalendar/fullcalendar.min.js'></script>
     <script src='/vendor/fullcalendar/lib/moment.min.js'></script>
     <script src='/vendor/fullcalendar/lib/jquery.min.js'></script>  --}}
-    {!! Html::script('vendor/fullcalendar/lib/jquery.min.js') !!}
-    {!! Html::script('vendor/fullcalendar/lib/jquery-ui.min.js') !!}
+    {!! Html::script('vendor/jquery.min.js') !!}
+    {!! Html::script('vendor/bootstrap/js/bootstrap.min.js') !!}
     {!! Html::script('vendor/fullcalendar/lib/moment.min.js') !!}
     {!! Html::script('vendor/fullcalendar/fullcalendar.min.js') !!}
+    {!! Html::script('vendor/bootstrap-datetimepicker/js/bootstrap-material-datetimepicker.js') !!}
+    {!! Html::script('vendor/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js') !!}
     <script>
+    var BASE_URL = "{{ url('/') }}"
 
 	$(document).ready(function() {
         var currentLangCode = 'pt-br';
@@ -42,69 +110,40 @@
 				right: 'month,basicWeek,basicDay'
 			},
             lang: currentLangCode,
-			defaultDate: '2017-09-12',
 			navLinks: true, // can click day/week names to navigate views
 			editable: true,
-			eventLimit: true, // allow "more" link when too many events
-			events: [
-				{
-					title: 'All Day Event',
-					start: '2017-09-01'
-				},
-				{
-					title: 'Long Event',
-					start: '2017-09-07',
-					end: '2017-09-10'
-				},
-				{
-					id: 999,
-					title: 'Repeating Event',
-					start: '2017-09-09T16:00:00'
-				},
-				{
-					id: 999,
-					title: 'Repeating Event',
-					start: '2017-09-16T16:00:00'
-				},
-				{
-					title: 'Conference',
-					start: '2017-09-11',
-					end: '2017-09-13'
-				},
-				{
-					title: 'Meeting',
-					start: '2017-09-12T10:30:00',
-					end: '2017-09-12T12:30:00'
-				},
-				{
-					title: 'Lunch',
-					start: '2017-09-12T12:00:00'
-				},
-				{
-					title: 'Meeting',
-					start: '2017-09-12T14:30:00'
-				},
-				{
-					title: 'Happy Hour',
-					start: '2017-09-12T17:30:00'
-				},
-				{
-					title: 'Dinner',
-					start: '2017-09-12T20:00:00'
-				},
-				{
-					title: 'Birthday Party',
-					start: '2017-09-13T07:00:00'
-				},
-				{
-					title: 'Click for Google',
-					url: 'http://google.com/',
-					start: '2017-09-28'
+            selectable: true,
+            selectHelper: true,
+
+            select: function(start){
+                start = moment(start.format());
+                $('#date_start').val(start.format('YYYY-MM-DD'));
+                $('#responsive-modal').modal('show');
+            },
+
+			events: {
+                url: BASE_URL + '/events',
+                error: function() {
+					$('#script-warning').show();
 				}
-			]
+            }
 		});
 		
 	});
+
+    $('.colorpicker').colorpicker();
+
+    $('#time_start').bootstrapMaterialDatePicker({
+        date: false,
+        shortTime: false,
+        format: 'HH:mm:ss'
+    });
+
+    $('#date_end').bootstrapMaterialDatePicker({
+        date: true,
+        shortTime: false,
+        format: 'YYYY-MM-DD HH:mm:ss'
+    })
 
 </script>
 @stop
