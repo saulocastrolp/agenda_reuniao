@@ -8,16 +8,7 @@
 
 @section('content')
     <p>Welcome to this beautiful admin panel.</p>
-    {{--  <div class="row">
-        <div class="col-md-3"></div>
-        <div class="col-md-9">
-            <div class="box box-primary">
-                <div class="box-body no-padding">
-                    <div id="calendar"></div>
-                </div>
-            </div>
-        </div>
-    </div>  --}}
+
     <div class="row">
         <div class="col-xs 12">
             <div class="box box-primary">
@@ -66,7 +57,52 @@
                         </div>
                     </div>
                     {!! Form::close() !!}
+
                     <div id="calendar"></div>
+
+                    <div id="modal-event" class="modal fade" tabindex="-1" data-backdrop="static">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4>Detalhes do Evento</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        {!! Form::label('_title', 'Titulo do Evento') !!}
+                                        {!! Form::text('_title', old('_title'), ['class' => 'form-control']) !!}
+                                    </div>
+                                    <div class="form-group">
+                                        {!! Form::label('_date_start', 'Data Início') !!}
+                                        {!! Form::text('_date_start', old('_date_start'), ['class' => 'form-control', 'readonly' => 'true']) !!}
+                                    </div>
+                                    <div class="form-group">
+                                        {!! Form::label('_time_start', 'Hora Início', ['class' => 'form-control']) !!}
+                                        {!! Form::text('_time_start', old('_time_start'), ['class' => 'form-control']) !!}
+                                    </div>
+                                    <div class="form-group">
+                                        {!! Form::label('_date_end', 'Data e Hora Fim', ['class' => 'form-control']) !!}
+                                        {!! Form::text('_date_end', old('_date_end'), ['class' => 'form-control']) !!}
+                                    </div>
+                                    <div class="form-group">
+                                        {!! Form::label('_color', 'Cor', ['class' => 'form-control']) !!}
+                                        <div class="input-group colorpicker">
+                                            {!! Form::text('_color', old('_color'), ['class' => 'form-control']) !!}
+                                            <span class="input-group-addon">
+                                                <i><span class="fa fa-icon"></span></i> 
+                                            </span>                                            
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <a id="delete" data-href="{{ url('events') }}" data-id="" class="btn btn-danger">Excluir</a>
+                                    <button type="button" class="btn btn-dafault" data-dismiss="modal">
+                                        Cancelar
+                                    </button>
+                                    {!! Form::submit('Salvar', ['class' => 'btn btn-success']) !!}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -126,6 +162,19 @@
                 error: function() {
 					$('#script-warning').show();
 				}
+            },
+
+            eventClick: function(event, jsEvent, view){
+                var date_start = $.fullCalendar.moment(event.start).format('YYYY-MM-DD');
+                var time_start = $.fullCalendar.moment(event.start).format('hh:mm:ss');
+                var date_end = $.fullCalendar.moment(event.end).format('YYYY-MM-DD hh:mm:ss');
+                $('#modal-event #delete').attr('data-id', event.id);
+                $('#modal-event #_title').val(event.title);
+                $('#modal-event #_date_start').val(date_start);
+                $('#modal-event #_time_start').val(time_start);
+                $('#modal-event #_date_end').val(date_end);
+                $('#modal-event #_color').val(event.color);
+                $('#modal-event').modal('show');
             }
 		});
 		
@@ -143,7 +192,25 @@
         date: true,
         shortTime: false,
         format: 'YYYY-MM-DD HH:mm:ss'
-    })
+    });
+
+    $('#delete').on('click', function(){
+        var x = $(this);
+        var delete_url = x.attr('data-href')+'/'+x.attr('data-id');
+
+        $.ajax({
+            url: delete_url,
+            type: 'DELETE',
+            success: function(result){
+                $('#modal-event').modal('hide');
+                alert(result.message);
+            },
+            error: function(result){
+                $('#modal-event').modal('hide');
+                alert(result.message);
+            }
+        });
+    });
 
 </script>
 @stop
