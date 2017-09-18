@@ -7,7 +7,7 @@ Requisitos:
 - PHP >= 7
 - Composer
 - Laravel 5.5
-- Banco de dados, preferência MySql, Postgres ou SqlServer
+- Banco de dados MYSQL
 
 1ºPasso
 - Crie um banco de dados com o nome de sua preferência
