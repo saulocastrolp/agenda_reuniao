@@ -11,7 +11,7 @@
         <div class="col-md-6">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    Dados do Usuário. ID: {{ Auth::user()->id }}
+                    Altere suas informações
                 </div>
                 {!! Form::model('UserController@update', ['method' => 'PATCH','route' => ['user.update',  Auth::user()->id]]) !!}
                 

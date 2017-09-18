@@ -7,7 +7,7 @@
 @stop
 
 @section('content')
-    <p>Welcome to this beautiful admin panel.</p>
+    <p>Instruções: Clique em uma data para marcar um evento. Para excluir/ver detalhes clique na tag do evento.</p>
 
     <div class="row">
         <div class="col-xs 12">
@@ -110,26 +110,18 @@
 @stop
 
 @section('css')
-    {{--  <link rel="stylesheet" href="/css/admin_custom.css">
-    <link rel="stylesheet" href="/vendor/fullcalendar/fullcalendar.min.css">
-    <link rel="stylesheet" href="/vendor/fullcalendar/fullcalendar.print.min.css">  --}}
     {!! Html::style('vendor/adminlte/css/bootstrap.min.css') !!}
     {!! Html::style('css/admin_custom.css') !!}
     {!! Html::style('vendor/fullcalendar/fullcalendar.min.css') !!}
     {!! Html::style('vendor/bootstrap-datetimepicker/css/bootstrap-material-datetimepicker.css') !!}
     {!! Html::style('vendor/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css') !!}
-    
-    {{--  {!! Html::style('vendor/seguce92/bootstrap-datetimepicker/css/bootstrap-material-datetimepicker.css') !!}
-    {!! Html::style('vendor/seguce92/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css') !!}  --}}
 @stop
 
 @section('js')
-    {{--  <script src='/vendor/fullcalendar/fullcalendar.min.js'></script>
-    <script src='/vendor/fullcalendar/lib/moment.min.js'></script>
-    <script src='/vendor/fullcalendar/lib/jquery.min.js'></script>  --}}
     {!! Html::script('vendor/jquery.min.js') !!}
     {!! Html::script('vendor/bootstrap/js/bootstrap.min.js') !!}
     {!! Html::script('vendor/fullcalendar/lib/moment.min.js') !!}
+    {!! Html::script('vendor/fullcalendar/locale/pt-br.js') !!}
     {!! Html::script('vendor/fullcalendar/fullcalendar.min.js') !!}
     {!! Html::script('vendor/bootstrap-datetimepicker/js/bootstrap-material-datetimepicker.js') !!}
     {!! Html::script('vendor/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js') !!}
@@ -137,19 +129,19 @@
     var BASE_URL = "{{ url('/') }}"
 
 	$(document).ready(function() {
-        var currentLangCode = 'pt-br';
+        var initialLocaleCode = 'pt-br';
 		
 		$('#calendar').fullCalendar({
 			header: {
 				left: 'prev,next today',
 				center: 'title',
-				right: 'month,basicWeek,basicDay'
+				right: 'month,basicWeek,basicDay',
 			},
-            lang: currentLangCode,
 			navLinks: true, // can click day/week names to navigate views
 			editable: true,
             selectable: true,
             selectHelper: true,
+            locale: initialLocaleCode,
 
             select: function(start){
                 start = moment(start.format());
@@ -175,8 +167,25 @@
                 $('#modal-event #_date_end').val(date_end);
                 $('#modal-event #_color').val(event.color);
                 $('#modal-event').modal('show');
-            }
+            },
 		});
+
+        // build the locale selector's options
+        $.each($.fullCalendar.locales, function(localeCode) {
+            $('#locale-selector').append(
+                $('<option/>')
+                    .attr('value', localeCode)
+                    .prop('selected', localeCode == initialLocaleCode)
+                    .text(localeCode)
+            );
+        });
+
+        // when the selected option changes, dynamically change the calendar option
+        $('#locale-selector').on('change', function() {
+            if (this.value) {
+                $('#calendar').fullCalendar('option', 'locale', this.value);
+            }
+        });
 		
 	});
 
@@ -204,13 +213,19 @@
             success: function(result){
                 $('#modal-event').modal('hide');
                 alert(result.message);
+                atualiza();
             },
             error: function(result){
                 $('#modal-event').modal('hide');
                 alert(result.message);
+                atualiza();
             }
         });
     });
+
+    function atualiza() {
+	    document.getElementById('calendar').innerHTML = location.reload();
+    }
 
 </script>
 @stop
